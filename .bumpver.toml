@@ -1,0 +1,27 @@
+[bumpver]
+current_version = "v2023.12.21"
+version_pattern = "vYYYY.0M.0D[.INC0]"
+commit_message = "[Release] {new_version}"
+commit = true
+tag = true
+push = true
+tag_message = "{new_version}"
+tag_scope = "default"
+# pre_commit_hook = "scripts/update_changelog.py"
+
+[bumpver.file_patterns]
+".bumpver.toml" = [
+    '^current_version = "{version}"$',
+]
+"pyproject.toml" = [
+    '^version = "{pep440_version}"$',
+]
+"event_planner/__init__.py" = [
+    '^__version__ = "{version}"',
+]
+"event_planner/settings/spectacular.py" = [
+    '"VERSION": "{version}",$',
+]
+"event_planner/api/tests/views/openapi_spec.json" = [
+    '"version": "{version}",$',
+]

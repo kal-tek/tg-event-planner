@@ -1,0 +1,56 @@
+name: Lint
+
+on: [push]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - uses: Flawless-Workflow/flawless-github-actions/setup-python@main
+      - uses: Flawless-Workflow/flawless-github-actions/pre-commit@main
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - uses: Flawless-Workflow/flawless-github-actions/setup-python@main
+      - uses: Flawless-Workflow/flawless-github-actions/lint-python@main
+
+  gh-actions-env:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - uses: Flawless-Workflow/flawless-github-actions/write-github-env@main
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - uses: hadolint/hadolint-action@v3.1.0
+
+  django:
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: "us4h+$-*z7=x-4b%!5pcy*!5xo0k84h@j3u+mh68d5glt5%x7m"
+      CORS_ALLOWED_ORIGINS: "http://localhost"
+      CSRF_TRUSTED_ORIGINS: "http://localhost"
+      ALLOWED_HOSTS: "*"
+
+    steps:
+      - uses: actions/checkout@v4.1.1
+
+      - uses: Flawless-Workflow/flawless-github-actions/setup-python@main
+      - uses: Flawless-Workflow/flawless-github-actions/lint-django@main
+        with:
+          deploy: false
+
+      - uses: Flawless-Workflow/flawless-github-actions/lint-django@main
+        with:
+          env-vars: ENVIRONMENT=production
+
+      - uses: Flawless-Workflow/flawless-github-actions/lint-django@main
+        with:
+          env-vars: |
+            ENVIRONMENT=staging
+            CORS_ALLOWED_ORIGIN_REGEXES=http://localhost:3000

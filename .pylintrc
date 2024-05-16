@@ -1,0 +1,27 @@
+[FORMAT]
+max-line-length=88
+ignore-long-lines=^.*(# )?<?https?://\S+>?$
+
+[MASTER]
+load-plugins=pylint_django
+django-settings-module=event_planner.settings
+ignore=migrations
+
+[MESSAGES CONTROL]
+enable=useless-suppression
+disable=missing-docstring,
+        unsubscriptable-object,
+        useless-super-delegation,
+        multiple-statements
+
+[SIMILARITIES]
+min-similarity-lines=4
+ignore-imports=yes
+
+[DESIGN]
+max-parents=12
+min-public-methods=0
+max-args=5
+
+[VARIABLES]
+ignored-argument-names=_.*|^pk

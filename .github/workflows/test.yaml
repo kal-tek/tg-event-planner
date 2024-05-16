@@ -1,0 +1,65 @@
+name: Integration Tests
+
+on: [push]
+
+jobs:
+  django:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v4.1.1
+
+      - uses: Flawless-Workflow/flawless-github-actions/setup-python@main
+
+      - name: Run tests w/ coverage
+        run: coverage run --concurrency=multiprocessing ./manage.py test --shuffle --parallel
+        env:
+          ENVIRONMENT: ci
+          DATABASE_URL: postgres://postgres:postgres@localhost/db
+
+      - uses: Flawless-Workflow/flawless-github-actions/report-coverage@main
+        with:
+          tests-glob: "*/tests/*/test_*.py"
+
+  django_on_docker:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v4.1.1
+
+      - uses: Flawless-Workflow/flawless-github-actions/publish-docker@main
+        id: build-docker
+        with:
+          login-server: ${{ secrets.STAGING_REGISTRY_URI }}
+          username: ${{ secrets.STAGING_REGISTRY_USERNAME }}
+          password: ${{ secrets.STAGING_REGISTRY_PASSWORD }}
+          tags: test
+
+      - name: Run tests inside the container
+        run: |
+          docker run \
+            --network="host" \
+            --volume "${PWD}:/app" \
+            --env ENVIRONMENT=CI \
+            --env DATABASE_URL=postgres://postgres:postgres@localhost/db \
+            ${{ steps.build-docker.outputs.image-name }} \
+            ./manage.py test --failfast --shuffle --parallel

@@ -1,0 +1,41 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "allowCompoundWords": true,
+  "words": [
+    "asgi",
+    "wsgi",
+    "pysetup",
+    "ipdb",
+    "noinput",
+    "hadolint",
+    "gunicorn",
+    "ruyaml",
+    "simplejwt",
+    "redoc",
+    "PYTHONUNBUFFERED",
+    "PYTHONDONTWRITEBYTECODE",
+    "psycopg",
+    "tblib",
+    "ipython",
+    "bumpver",
+    "absolufy",
+    "Werkzeug",
+    "tqdm",
+    "pygraphviz",
+    "signup",
+    "normie",
+    "uidb"
+  ],
+  "dictionaries": [
+    "custom-words",
+    "bash",
+    "en_us",
+    "css",
+    "html",
+    "python"
+  ],
+  "ignorePaths": [
+    ".gitignore"
+  ]
+}

@@ -1,0 +1,21 @@
+name: Graph Model
+
+on:
+  pull_request:
+    branches:
+      - main
+
+env:
+  POETRY_VERSION: 1.7.1
+  BRANCH: ${{ github.event_name == 'pull_request' && format('refs/heads/{0}', github.event.pull_request.head.ref) || github.ref }}
+
+jobs:
+  export-model-graph:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+        with:
+          ref: ${{ env.BRANCH }}
+
+      - uses: Flawless-Workflow/flawless-github-actions/setup-python@main
+      - uses: Flawless-Workflow/flawless-github-actions/write-model-diagram@main

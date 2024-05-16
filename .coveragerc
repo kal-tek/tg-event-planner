@@ -1,0 +1,22 @@
+[run]
+source = .
+branch = True
+omit =
+    event_planner/asgi.py,
+    event_planner/wsgi.py,
+    event_planner/api/admin/*,
+    event_planner/api/scripts/*
+
+[report]
+fail_under = 60
+skip_covered = True
+skip_empty = True
+exclude_lines =
+    # pragma: no cover
+    ImportError
+    ProgrammingError
+    RuntimeTypeError
+    UnreachableError
+    NotImplementedError
+    if __name__ == .__main__.
+    if settings. DEBUG:

@@ -1,0 +1,24 @@
+name: Release Staging
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.1.1
+
+      - id: gitsha
+        run: echo "value=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - uses: Flawless-Workflow/flawless-github-actions/publish-docker@main
+        with:
+          login-server: ${{ secrets.STAGING_REGISTRY_URI }}
+          username: ${{ secrets.STAGING_REGISTRY_USERNAME }}
+          password: ${{ secrets.STAGING_REGISTRY_PASSWORD }}
+          tags: |
+            latest-staging
+            ${{ steps.gitsha.outputs.value }}

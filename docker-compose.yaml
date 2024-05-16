@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:14
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=event_planner
+    ports:
+      - "5433:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  web:
+    build:
+      context: .
+    environment:
+      - ENVIRONMENT=development
+      - SECRET_KEY=remember-this-is-just-for-development
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/event_planner
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+
+volumes:
+  db_data:
